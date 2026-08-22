@@ -1,0 +1,7 @@
+# Local corpus snapshots and generated indexes
+data/
+
+# Go build and coverage artifacts
+bin/
+*.test
+coverage.out
