@@ -105,6 +105,35 @@ maximum tool-call loop and preserve structured tool results in the prompt.
 backend, but the host or an MCP-capable chat application must provide the
 bridge between Ollama's tool-calling API and the MCP server.
 
+The repository includes that bridge as `cmd/ollama-mcp`. It starts
+`cmd/ganjoor-mcp` as a child process over MCP stdio, calls `tools/list`, maps
+the discovered schemas to Ollama's `tools` JSON field, and forwards each
+Ollama `tool_calls` entry to MCP `tools/call`. Tool results are returned to
+Ollama as JSON-encoded `tool` messages. The bridge uses a bounded tool-call
+loop and reads one user prompt per input line.
+
+### Bridge debugging and evaluation
+
+The first end-to-end run demonstrated that MCP transport initialization and
+tool invocation work, but model behavior and evidence flow are not yet
+validated. A relevant user request produced an unrelated answer in one run,
+and another run generated an unsuitable transliterated search term. Before
+changing ranking or adding semantic retrieval, debug the complete loop:
+
+1. Record the exact tool name and arguments selected by Ollama.
+2. Record a compact, privacy-conscious summary of each MCP result, including
+   result count, IDs, and error state.
+3. Add an opt-in trace containing the Ollama message roles and tool-call
+   payloads, with response text truncation.
+4. Exercise each MCP tool deterministically through an MCP client test.
+5. Run the same Persian terms directly against the Ganjoor API and through MCP
+   to isolate API, adapter, schema, and model issues.
+6. Use a constrained system prompt requiring tool use for claims about poems,
+   exact quotations, attribution, and URLs.
+
+This separates transport/protocol failures from model tool-selection failures
+and retrieval-quality failures.
+
 ### Implementation direction
 
 The MVP will be implemented as a standalone Go server backed by the Ganjoor
@@ -130,9 +159,8 @@ complete poem retrieval, `GET /api/ganjoor/poet/{id}` for poet lookup,
 poem retrieval and deliberately disables unrelated expansions such as
 recitations, images, songs, comments, navigation, and related poems.
 
-The current development machine has Go 1.21.5, so the toolchain must be
-updated before adding the SDK dependency. Vector storage and embedding model
-selection remain intentionally deferred until the lexical baseline is
+The SDK dependency requires Go 1.23 or newer. Vector storage and embedding
+model selection remain intentionally deferred until the lexical baseline is
 measured.
 
 ## Design Decisions
@@ -233,6 +261,20 @@ MCP server testable with other clients later.
 **Consequence:** The host is responsible for MCP transport, Ollama tool-call
 translation, conversation state, and loop limits. It should not contain
 Ganjoor retrieval or attribution logic.
+
+### Use Ollama's native tool-calling API for the host
+
+**Decision:** Implement the first host as a small local CLI bridge using
+Ollama's `/api/chat` endpoint rather than modifying the Ollama macOS app.
+
+**Reasoning:** Ollama accepts function-tool schemas and returns tool calls,
+while MCP provides discovery and execution. Translating between those two
+contracts keeps the bridge small and works with the Ollama app's local runtime
+without requiring an app-specific plugin mechanism.
+
+**Consequence:** The bridge is currently a terminal interface. An Ollama
+desktop UI integration would require a separate MCP-capable frontend or a
+future host with its own UI.
 
 ## Retrieval Pipeline
 

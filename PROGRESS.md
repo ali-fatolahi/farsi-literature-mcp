@@ -6,7 +6,7 @@ This file records implementation progress. Design rationale belongs in [`DESIGN.
 
 **Current phase:** research and design  
 **Last updated:** 2026-08-22  
-**Runnable server:** not yet available
+**Runnable server:** initial stdio server available
 
 ## Completed
 
@@ -24,7 +24,9 @@ This file records implementation progress. Design rationale belongs in [`DESIGN.
 - [x] Selected the official Go MCP SDK and a pure-Go SQLite driver with FTS5 support for the lexical baseline.
 - [x] Implemented a reproducible snapshot downloader with manifest validation and recursive content discovery.
 - [x] Deferred full snapshot ingestion for the MVP after measuring unauthenticated download rate limits; use the Ganjoor API initially.
-- [x] Inspected the published API contract and added a Go client foundation with `get_poem`, timeouts via contexts, bounded retries, and typed upstream errors.
+- [x] Inspected the published API contract and added a Go client with poem, poet, category, lexical search, context, and provenance methods, context-aware requests, bounded retries, rate limiting, and typed upstream errors.
+- [x] Wired the API client into an initial stdio MCP server with read-only poem, poet, category, search, context, and provenance tools, plus handler tests.
+- [x] Added an Ollama-to-MCP bridge that translates discovered tools and runs the bounded tool-call loop.
 - [x] Connected the local project to `ali-fatolahi/farsi-literature-mcp` and added GitHub Actions CI for formatting, vet, and tests.
 
 ## Next Steps
@@ -59,9 +61,19 @@ mirrors, authentication, and rate limits.
 
 ### Step 4: implement the API-backed MVP
 
-- Complete the API adapter for poet, context, and search operations.
-- Add client-side rate limiting in addition to bounded retries and clear
-  upstream errors.
+- Expand MCP request/response validation and test the bridge with a real Ollama
+  model and MCP client flow.
+- Debug the end-to-end tool loop before improving retrieval quality:
+  - Log selected tool arguments and compact result summaries.
+  - Capture the exact Ollama request/response roles and tool-call payloads in
+    an opt-in trace mode.
+  - Add deterministic MCP client tests for every registered tool.
+  - Add mocked Ollama integration tests for single- and multi-round calls.
+  - Compare direct Ganjoor API results with results returned through MCP.
+  - Test Persian prompts and queries such as `فراق`, `هجر`, `دلتنگی`, and
+    `عشق` separately from English prompts.
+  - Strengthen tool descriptions and the system prompt so the model searches
+    before making evidence claims and preserves returned quotations.
 - Keep the local API adapter separate so it can later be replaced by snapshot
   indexes.
 
