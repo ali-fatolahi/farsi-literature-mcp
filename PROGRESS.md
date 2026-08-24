@@ -18,7 +18,7 @@ This file records implementation progress. Design rationale belongs in [`DESIGN.
 - [x] Identified the existing Persian poetry AI-agent plugin and its QMD/MCP approach.
 - [x] Recorded the initial architecture and design decisions in [`DESIGN.md`](DESIGN.md).
 - [x] Restructured [`README.md`](README.md) as a project guide.
-- [x] Chose a thin Ollama-backed MCP chat host as the MVP integration path.
+- [x] Chose Claude Desktop as the initial MCP client and removed the custom Ollama bridge from the MVP path.
 - [x] Inspected the pinned `ganjoor-data` manifest, API documentation, and representative poet, category, poem, and ID-index records.
 - [x] Chose Go as the MVP implementation direction.
 - [x] Selected the official Go MCP SDK and a pure-Go SQLite driver with FTS5 support for the lexical baseline.
@@ -26,7 +26,8 @@ This file records implementation progress. Design rationale belongs in [`DESIGN.
 - [x] Deferred full snapshot ingestion for the MVP after measuring unauthenticated download rate limits; use the Ganjoor API initially.
 - [x] Inspected the published API contract and added a Go client with poem, poet, category, lexical search, context, and provenance methods, context-aware requests, bounded retries, rate limiting, and typed upstream errors.
 - [x] Wired the API client into an initial stdio MCP server with read-only poem, poet, category, search, context, and provenance tools, plus handler tests.
-- [x] Added an Ollama-to-MCP bridge that translates discovered tools and runs the bounded tool-call loop.
+- [x] Verified the server can be configured as a Claude Desktop stdio MCP server.
+- [x] Stored the baseline separation-and-longing test prompt in [`TEST_PROMPTS.md`](TEST_PROMPTS.md).
 - [x] Connected the local project to `ali-fatolahi/farsi-literature-mcp` and added GitHub Actions CI for formatting, vet, and tests.
 
 ## Next Steps
@@ -37,7 +38,7 @@ This file records implementation progress. Design rationale belongs in [`DESIGN.
   `ali-fatolahi/farsi-literature-mcp`.
 - GitHub Actions workflow added for formatting checks, `go vet`, and tests.
 - CI runs with CGO disabled for the current pure-Go code path.
-- Push the initial commit after review.
+- Initial commits are pushed to `main`.
 - Add a minimal contribution and issue workflow once the repository exists.
 
 ### Step 1: inspect the upstream schema
@@ -61,8 +62,8 @@ mirrors, authentication, and rate limits.
 
 ### Step 4: implement the API-backed MVP
 
-- Expand MCP request/response validation and test the bridge with a real Ollama
-  model and MCP client flow.
+- Expand MCP request/response validation and test the server through Claude
+  Desktop or another MCP client.
 - Debug the end-to-end tool loop before improving retrieval quality:
   - Log selected tool arguments and compact result summaries.
   - Capture the exact Ollama request/response roles and tool-call payloads in
@@ -109,7 +110,7 @@ mirrors, authentication, and rate limits.
 | 2026-08-19 | Prefer the official public export over HTML scraping for the indexing source. | [`DESIGN.md`](DESIGN.md) |
 | 2026-08-19 | Use hybrid lexical and semantic retrieval. | [`DESIGN.md`](DESIGN.md) |
 | 2026-08-19 | Preserve original text and provenance in every result. | [`DESIGN.md`](DESIGN.md) |
-| 2026-08-20 | Use Ollama plus a thin MCP chat host for the MVP; no separate agent framework initially. | [`DESIGN.md`](DESIGN.md) |
+| 2026-08-24 | Use Claude Desktop as the initial MCP client; remove the custom Ollama bridge from the MVP path. | [`DESIGN.md`](DESIGN.md) |
 
 ## Blockers and Notes
 

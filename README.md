@@ -19,6 +19,7 @@ The initial target is [Ganjoor](https://ganjoor.net), a large public collection 
 | [`README.md`](README.md) | Project overview, setup, usage, and links |
 | [`DESIGN.md`](DESIGN.md) | Architecture, design decisions, tradeoffs, and open questions |
 | [`PROGRESS.md`](PROGRESS.md) | Dated progress log and next implementation steps |
+| [`TEST_PROMPTS.md`](TEST_PROMPTS.md) | Reusable prompts for client and retrieval checks |
 
 ## Current Status
 
@@ -51,9 +52,7 @@ go mod download
 | --- | --- |
 | `cmd/ganjoor-fetch` | Command-line downloader for pinned `ganjoor-data` snapshots |
 | `cmd/ganjoor-mcp` | Stdio MCP server entry point |
-| `cmd/ollama-mcp` | Interactive Ollama-to-MCP bridge |
 | `internal/ganjoor` | Ganjoor API client, response models, and upstream error handling |
-| `internal/bridge` | MCP tool discovery, Ollama tool translation, and tool-call loop |
 | `internal/server` | MCP tool registration and handlers |
 | `internal/snapshot` | Snapshot manifest validation and recursive export downloading |
 | `.github/workflows/ci.yml` | Formatting, vet, and test checks run by GitHub Actions |
@@ -92,19 +91,41 @@ go run ./cmd/ganjoor-mcp
 It currently exposes read-only poem, poet, category, search, context, and
 provenance tools for MCP-compatible clients.
 
-To use those tools with Ollama's local model API, start the bridge while the
-Ollama macOS app is running and the selected model is available:
+To use the server with Claude Desktop, add it to Claude Desktop's MCP
+configuration file. Use absolute paths:
 
-```sh
-ollama pull qwen3
-go run ./cmd/ollama-mcp -model qwen3
+```json
+{
+  "mcpServers": {
+    "farsi-literature": {
+      "command": "go",
+      "args": [
+        "run",
+        "/absolute/path/to/farsi-literature-mcp/cmd/ganjoor-mcp"
+      ]
+    }
+  }
+}
 ```
 
-Type one prompt per line. The bridge starts the MCP server automatically,
-discovers its tools, forwards Ollama tool calls, and prints the final response.
-Progress logs are written to stderr so they remain visible without mixing into
-the response text. The Ollama app itself does not need a separate MCP
-configuration.
+For faster startup, build the server and reference the binary instead:
+
+```sh
+go build -o ~/bin/ganjoor-mcp ./cmd/ganjoor-mcp
+```
+
+```json
+{
+  "mcpServers": {
+    "farsi-literature": {
+      "command": "/Users/yourname/bin/ganjoor-mcp"
+    }
+  }
+}
+```
+
+Restart Claude Desktop after saving the configuration. The server currently
+uses the Ganjoor API directly; no local corpus download is required.
 
 ## Planned MCP Tools
 

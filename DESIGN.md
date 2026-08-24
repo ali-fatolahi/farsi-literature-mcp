@@ -78,61 +78,16 @@ Ganjoor public export / API
  MCP tools --> compatible AI agents and clients
 ```
 
-### MVP with Ollama
+### MCP client integration
 
-For the MVP, use Ollama as the language-model runtime and keep the MCP server
-as the only domain-specific service. A thin local chat host is still required:
-it maintains the conversation, advertises the MCP tools to the model, forwards
-tool calls to the MCP server, and returns tool results to Ollama for the final
-response.
+Claude Desktop is the primary MCP client for the MVP. It launches
+`cmd/ganjoor-mcp` over stdio from a JSON `mcpServers` configuration, discovers
+the server's tools, and manages the model/tool-call loop. The repository does
+not need to implement a separate chat host or Ollama bridge.
 
-```text
-human-friendly query
-          |
-          v
-local chat host <--> Ollama API
-          |
-          v
-MCP client <--> Ganjoor MCP server
-```
-
-This avoids building a separate planning agent for the first release. Ollama's
-model performs the tool-selection loop, while the MCP server owns retrieval,
-source text, identifiers, and provenance. The host should enforce a small
-maximum tool-call loop and preserve structured tool results in the prompt.
-
-`ollama chat` by itself is not an MCP client. It can be used as the model
-backend, but the host or an MCP-capable chat application must provide the
-bridge between Ollama's tool-calling API and the MCP server.
-
-The repository includes that bridge as `cmd/ollama-mcp`. It starts
-`cmd/ganjoor-mcp` as a child process over MCP stdio, calls `tools/list`, maps
-the discovered schemas to Ollama's `tools` JSON field, and forwards each
-Ollama `tool_calls` entry to MCP `tools/call`. Tool results are returned to
-Ollama as JSON-encoded `tool` messages. The bridge uses a bounded tool-call
-loop and reads one user prompt per input line.
-
-### Bridge debugging and evaluation
-
-The first end-to-end run demonstrated that MCP transport initialization and
-tool invocation work, but model behavior and evidence flow are not yet
-validated. A relevant user request produced an unrelated answer in one run,
-and another run generated an unsuitable transliterated search term. Before
-changing ranking or adding semantic retrieval, debug the complete loop:
-
-1. Record the exact tool name and arguments selected by Ollama.
-2. Record a compact, privacy-conscious summary of each MCP result, including
-   result count, IDs, and error state.
-3. Add an opt-in trace containing the Ollama message roles and tool-call
-   payloads, with response text truncation.
-4. Exercise each MCP tool deterministically through an MCP client test.
-5. Run the same Persian terms directly against the Ganjoor API and through MCP
-   to isolate API, adapter, schema, and model issues.
-6. Use a constrained system prompt requiring tool use for claims about poems,
-   exact quotations, attribution, and URLs.
-
-This separates transport/protocol failures from model tool-selection failures
-and retrieval-quality failures.
+Ollama remains a possible future model backend through an MCP-capable client,
+but the Ollama macOS app is not the project's MCP host and is not a required
+integration target.
 
 ### Implementation direction
 
@@ -150,7 +105,8 @@ The initial component choices are:
 - `modernc.org/sqlite` pinned to the v1.34 line for a pure-Go
   `database/sql` driver and SQLite FTS5 lexical indexing without a CGO
   requirement.
-- Ollama's HTTP API for local generation and, after evaluation, embeddings.
+- Ollama's HTTP API may be evaluated later for embeddings or use through a
+  separate MCP-capable client.
 
 The initial API contract inspection found `GET /api/ganjoor/poem/{id}` for
 complete poem retrieval, `GET /api/ganjoor/poet/{id}` for poet lookup,
@@ -249,32 +205,17 @@ creation if the installed toolchain or MCP protocol target changes.
 
 **Consequence:** An agent may orchestrate several calls, but the server remains useful without a particular LLM provider.
 
-### Keep the MVP host thin
+### Use Claude Desktop as the initial MCP host
 
-**Decision:** Start with a minimal Ollama-backed MCP chat host rather than a
-separate agent framework.
+**Decision:** Use Claude Desktop's JSON MCP configuration for the first
+interactive client integration.
 
-**Reasoning:** The model can choose among focused read-only tools without an
-additional planner. This keeps the first implementation small and makes the
-MCP server testable with other clients later.
+**Reasoning:** Claude Desktop natively launches stdio MCP servers and manages
+tool discovery and model orchestration, avoiding a project-specific bridge.
 
-**Consequence:** The host is responsible for MCP transport, Ollama tool-call
-translation, conversation state, and loop limits. It should not contain
-Ganjoor retrieval or attribution logic.
-
-### Use Ollama's native tool-calling API for the host
-
-**Decision:** Implement the first host as a small local CLI bridge using
-Ollama's `/api/chat` endpoint rather than modifying the Ollama macOS app.
-
-**Reasoning:** Ollama accepts function-tool schemas and returns tool calls,
-while MCP provides discovery and execution. Translating between those two
-contracts keeps the bridge small and works with the Ollama app's local runtime
-without requiring an app-specific plugin mechanism.
-
-**Consequence:** The bridge is currently a terminal interface. An Ollama
-desktop UI integration would require a separate MCP-capable frontend or a
-future host with its own UI.
+**Consequence:** The project can focus on reliable MCP tools and retrieval.
+Other clients, including Ollama-backed MCP clients, can be supported later
+without changing the Ganjoor server contract.
 
 ## Retrieval Pipeline
 
