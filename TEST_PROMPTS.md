@@ -24,3 +24,14 @@ The client should call `search_poetry` before making literary evidence claims.
 Results should use exact text returned by Ganjoor, preserve attribution, and
 include URLs derived from the returned poem records. Unverified or missing
 results should be stated explicitly rather than filled with generated text.
+
+## Evaluation note
+
+The separation-and-longing prompt is a useful smoke test, but it does not yet
+demonstrate a strong advantage over Claude's built-in response because the
+explicit Persian terms (`فراق` and `دلتنگی`) make direct keyword search easy.
+Add harder evaluation prompts later, such as thematic paraphrases, spelling
+and spacing variants, ambiguous attribution, context-dependent requests, and
+queries requiring verified provenance. Consider expanding the server's
+retrieval features before treating this prompt as evidence of distinct MCP
+value.
