@@ -4,8 +4,8 @@ This file records implementation progress. Design rationale belongs in [`DESIGN.
 
 ## Status
 
-**Current phase:** research and design  
-**Last updated:** 2026-08-22  
+**Current phase:** API-backed MVP evaluation
+**Last updated:** 2026-08-26
 **Runnable server:** initial stdio server available
 
 ## Completed
@@ -28,6 +28,10 @@ This file records implementation progress. Design rationale belongs in [`DESIGN.
 - [x] Wired the API client into an initial stdio MCP server with read-only poem, poet, category, search, context, and provenance tools, plus handler tests.
 - [x] Verified the server can be configured as a Claude Desktop stdio MCP server.
 - [x] Stored the baseline separation-and-longing test prompt in [`TEST_PROMPTS.md`](TEST_PROMPTS.md).
+- [x] Ran initial Claude Desktop comparisons with and without the MCP server,
+  including explicit-keyword, metaphorical, and political-literary prompts.
+- [x] Recorded evaluation results and identified ranking, provenance, and
+  tool-result-size gaps in [`evaluations/`](evaluations/).
 - [x] Connected the local project to `ali-fatolahi/farsi-literature-mcp` and added GitHub Actions CI for formatting, vet, and tests.
 
 ## Next Steps
@@ -66,15 +70,19 @@ mirrors, authentication, and rate limits.
   Desktop or another MCP client.
 - Debug the end-to-end tool loop before improving retrieval quality:
   - Log selected tool arguments and compact result summaries.
-  - Capture the exact Ollama request/response roles and tool-call payloads in
-    an opt-in trace mode.
+  - Capture exact MCP tool names, arguments, and returned summaries in an
+    opt-in trace mode.
   - Add deterministic MCP client tests for every registered tool.
-  - Add mocked Ollama integration tests for single- and multi-round calls.
   - Compare direct Ganjoor API results with results returned through MCP.
-  - Test Persian prompts and queries such as `فراق`, `هجر`, `دلتنگی`, and
-    `عشق` separately from English prompts.
-  - Strengthen tool descriptions and the system prompt so the model searches
-    before making evidence claims and preserves returned quotations.
+  - Add compact search result types containing stable IDs, titles, poet
+    metadata, short excerpts, and canonical URLs; reserve full poem text for
+    explicit lookup/context calls so MCP responses stay below client limits.
+  - Require source links and identifiers in evidence-oriented result
+    formatting.
+  - Measure popularity/canonicality, relevance, and source diversity
+    separately; decide whether ranking should promote canonical sources.
+  - Add prompts that test thematic paraphrases, spelling variants, ambiguous
+    attribution, and context-dependent requests.
 - Keep the local API adapter separate so it can later be replaced by snapshot
   indexes.
 
@@ -90,17 +98,18 @@ mirrors, authentication, and rate limits.
 - Support exact-line search, normalized search, poet filters, and source links.
 - Measure baseline retrieval before adding embeddings.
 
-### Step 6: add semantic and hybrid retrieval
+### Step 7: add semantic and hybrid retrieval
 
 - Build a relevance-labeled query set.
 - Benchmark multilingual embedding candidates in Persian and English.
 - Combine lexical and vector candidates without degrading exact-line search.
 
-### Step 7: expose MCP tools
+### Step 8: extend and evaluate MCP tools
 
-- Implement read-only search, lookup, context, and provenance tools.
+- Improve the existing read-only search, lookup, context, and provenance
+  tools using the evaluation findings above.
 - Validate structured responses and source links.
-- Test with at least one MCP client.
+- Continue testing with Claude Desktop and recorded paired evaluations.
 
 ## Decision Log
 
@@ -111,9 +120,9 @@ mirrors, authentication, and rate limits.
 | 2026-08-19 | Use hybrid lexical and semantic retrieval. | [`DESIGN.md`](DESIGN.md) |
 | 2026-08-19 | Preserve original text and provenance in every result. | [`DESIGN.md`](DESIGN.md) |
 | 2026-08-24 | Use Claude Desktop as the initial MCP client; remove the custom Ollama bridge from the MVP path. | [`DESIGN.md`](DESIGN.md) |
+| 2026-08-26 | Treat compact, provenance-rich search results and ranking evaluation as the next API-backed MVP priorities. | [`evaluations/`](evaluations/) |
 
 ## Blockers and Notes
 
-- The Go MCP SDK and index technology still need to be selected.
 - No upstream snapshot has been downloaded into this repository.
 - Licensing and redistribution requirements need review before publishing generated indexes or summaries.

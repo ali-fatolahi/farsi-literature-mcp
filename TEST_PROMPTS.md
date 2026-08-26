@@ -35,3 +35,9 @@ and spacing variants, ambiguous attribution, context-dependent requests, and
 queries requiring verified provenance. Consider expanding the server's
 retrieval features before treating this prompt as evidence of distinct MCP
 value.
+
+The initial comparisons also suggest a ranking tradeoff: Claude without MCP
+often leads with popular or canonical sources, while the current MCP search
+may surface less-known resources through flatter ranking. Future evaluation
+should measure both relevance and source diversity, and consider whether
+popularity or canonicality should be an explicit ranking signal.
