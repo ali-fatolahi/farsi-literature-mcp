@@ -4,8 +4,8 @@ This file records implementation progress. Design rationale belongs in [`DESIGN.
 
 ## Status
 
-**Current phase:** API-backed MVP evaluation
-**Last updated:** 2026-08-26
+**Current phase:** open-source governance and MVP evaluation
+**Last updated:** 2026-08-28
 **Runnable server:** initial stdio server available
 
 ## Completed
@@ -33,31 +33,25 @@ This file records implementation progress. Design rationale belongs in [`DESIGN.
 - [x] Recorded evaluation results and identified ranking, provenance, and
   tool-result-size gaps in [`evaluations/`](evaluations/).
 - [x] Connected the local project to `ali-fatolahi/farsi-literature-mcp` and added GitHub Actions CI for formatting, vet, and tests.
+- [x] Established the open-source contribution workflow with `CONTRIBUTING.md`, issue templates, a pull request template, `CODEOWNERS`, and the repo owner exemption policy.
+- [x] Verified the GitHub ruleset path with a collaborator account: PR, CI, approval, and code-owner review requirements all function for a non-admin user.
 
 ## Next Steps
 
 ### Step -1: establish the open-source contribution workflow
 
-- Add `CONTRIBUTING.md` describing design proposals, code changes, test
-  results, issue reports, and the pull-request workflow.
-- Add GitHub issue forms or templates for bug reports, feature requests,
-  design proposals, and evaluation/test results.
-- Add a pull-request template requiring scope, evidence, tests, and
-  documentation impact.
-- Add `CODEOWNERS` assigning code review ownership to the repository owner.
-- Require pull requests for changes to `main`; prevent direct pushes and
-  direct merges without review.
-- Configure branch protection or rulesets requiring CI checks and at least one
-  maintainer approval. Initially, the repository owner must approve code
-  changes, with stale approvals dismissed when the pull request changes.
-- Define the testing policy for code changes, including required targeted
-  tests, the existing formatting/vet/test CI checks, and when broader
-  coverage is expected.
-- Document contribution boundaries for provenance, licensing, source
-  quotations, generated data, and external API usage.
-- Choose and add the project license, and decide whether a code of conduct is
-  needed before inviting outside contributors.
-- Decide when to add additional maintainers and approval requirements.
+Completed on 2026-08-28. The repository now has:
+
+- `CONTRIBUTING.md` for design proposals, code changes, evaluation results,
+  and review expectations.
+- GitHub issue forms for bugs, features, and design proposals.
+- A PR template requiring scope, validation, evidence, and documentation
+  impact.
+- `CODEOWNERS` assigning review ownership to the repository owner.
+- A GitHub branch ruleset requiring pull requests, code-owner review, and CI
+  checks for non-admin contributors while permitting the repo owner to bypass
+  them.
+- A repository license and clear owner-exemption governance.
 
 ### Step -2: package a container distribution
 
@@ -73,7 +67,8 @@ users who do not have Go installed.
 - GitHub Actions workflow added for formatting checks, `go vet`, and tests.
 - CI runs with CGO disabled for the current pure-Go code path.
 - Initial commits are pushed to `main`.
-- Add a minimal contribution and issue workflow once the repository exists.
+- Manual `workflow_dispatch` support added so the workflow can be triggered
+  directly from GitHub Actions for validation and ruleset testing.
 
 ### Step 1: inspect the upstream schema
 
