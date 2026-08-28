@@ -36,6 +36,36 @@ This file records implementation progress. Design rationale belongs in [`DESIGN.
 
 ## Next Steps
 
+### Step -1: establish the open-source contribution workflow
+
+- Add `CONTRIBUTING.md` describing design proposals, code changes, test
+  results, issue reports, and the pull-request workflow.
+- Add GitHub issue forms or templates for bug reports, feature requests,
+  design proposals, and evaluation/test results.
+- Add a pull-request template requiring scope, evidence, tests, and
+  documentation impact.
+- Add `CODEOWNERS` assigning code review ownership to the repository owner.
+- Require pull requests for changes to `main`; prevent direct pushes and
+  direct merges without review.
+- Configure branch protection or rulesets requiring CI checks and at least one
+  maintainer approval. Initially, the repository owner must approve code
+  changes, with stale approvals dismissed when the pull request changes.
+- Define the testing policy for code changes, including required targeted
+  tests, the existing formatting/vet/test CI checks, and when broader
+  coverage is expected.
+- Document contribution boundaries for provenance, licensing, source
+  quotations, generated data, and external API usage.
+- Choose and add the project license, and decide whether a code of conduct is
+  needed before inviting outside contributors.
+- Decide when to add additional maintainers and approval requirements.
+
+### Step -2: package a container distribution
+
+This is deferred until the API-backed MVP and contribution workflow are
+stable. Later work should define a minimal container image, configuration and
+network requirements, versioning/release tags, and a simple run example for
+users who do not have Go installed.
+
 ### Step 0: establish the GitHub project and CI
 
 - The local repository is initialized on `main` with `origin` set to

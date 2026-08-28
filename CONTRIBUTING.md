@@ -42,9 +42,11 @@ For this project, code changes must meet all of the following:
 - Pass the required CI checks (`gofmt`, `go vet`, and `go test`)
 - Include relevant tests for changed behavior
 - Keep the project's provenance and source-link requirements intact
-- Be reviewed and approved by the repository owner before merge
+- Be reviewed and approved by the repository owner before merge unless the repository owner is the actor making the change
 
-At the moment, the repository owner must approve code changes before they are merged. Branch protection should require pull requests and status checks in GitHub settings.
+The repository owner is exempt from the usual approval requirement and may merge directly to `main` for repository maintenance. All other contributors must use pull requests, required CI checks, and repo-owner review before merge.
+
+Branch protection should require pull requests and status checks in GitHub settings, while allowing the repository owner to bypass them for direct maintenance work.
 
 ## Design proposals
 
