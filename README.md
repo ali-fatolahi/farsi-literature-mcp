@@ -91,28 +91,8 @@ go run ./cmd/ganjoor-mcp
 It currently exposes read-only poem, poet, category, search, context, and
 provenance tools for MCP-compatible clients.
 
-To use the server with Claude Desktop, add it to Claude Desktop's MCP
-configuration file. Use absolute paths:
-
-```json
-{
-  "mcpServers": {
-    "farsi-literature": {
-      "command": "go",
-      "args": [
-        "run",
-        "/absolute/path/to/farsi-literature-mcp/cmd/ganjoor-mcp"
-      ]
-    }
-  }
-}
-```
-
-For faster startup, build the server and reference the binary instead:
-
-```sh
-go build -o ~/bin/ganjoor-mcp ./cmd/ganjoor-mcp
-```
+To use the server with Claude Desktop, build the server and add the binary to
+Claude Desktop's MCP configuration file. Use absolute paths:
 
 ```json
 {
@@ -124,8 +104,44 @@ go build -o ~/bin/ganjoor-mcp ./cmd/ganjoor-mcp
 }
 ```
 
-Restart Claude Desktop after saving the configuration. The server currently
-uses the Ganjoor API directly; no local corpus download is required.
+```sh
+mkdir -p ~/bin
+go build -o ~/bin/ganjoor-mcp ./cmd/ganjoor-mcp
+```
+
+The Claude Desktop configuration file on macOS is usually
+`~/Library/Application Support/Claude/claude_desktop_config.json`. Restart
+Claude Desktop after saving the configuration. The server currently uses the
+Ganjoor API directly; no local corpus download is required.
+
+### Run the MVP in Claude Desktop
+
+1. Run the repository checks and build the binary:
+
+   ```sh
+   CGO_ENABLED=0 go test ./...
+   mkdir -p ~/bin
+   CGO_ENABLED=0 go build -o ~/bin/ganjoor-mcp ./cmd/ganjoor-mcp
+   ```
+
+2. Add the `farsi-literature` entry above to
+   `~/Library/Application Support/Claude/claude_desktop_config.json`, replacing
+   `/Users/yourname` with the actual home directory.
+3. Restart Claude Desktop. Approve the server/tool permission request when
+   prompted.
+4. Open a new chat and confirm that the tools menu lists `search_poetry`,
+   `get_poem`, `get_poet`, `get_category`, `get_context`, and
+   `get_provenance`.
+5. Run a prompt from `TEST_PROMPTS.md`. Require exact quotations, poet/work
+   attribution, and Ganjoor URLs; do not treat an unverified answer as a
+   successful retrieval.
+6. Repeat the same prompt with the MCP server removed from the config, then
+   record both responses in `evaluations/`.
+
+If the server fails to connect, inspect
+`~/Library/Logs/Claude/mcp-server-farsi-literature.log`. A successful startup
+includes `Server started and connected successfully`. The server communicates
+over stdio, so diagnostic output must not be written to stdout.
 
 ## Planned MCP Tools
 
@@ -139,7 +155,9 @@ uses the Ganjoor API directly; no local corpus download is required.
 
 All search results should include stable identifiers and a link to the relevant Ganjoor page.
 
-## Contributing to the Direction
+## Contributing to the project
+
+We welcome design proposals, bug reports, code contributions, and evaluation notes. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the current contribution workflow, required review process, and testing expectations.
 
 Useful early contributions include sample thematic queries with expected relevant poems, notes about Persian normalization, retrieval evaluation examples, feedback on MCP tool boundaries, and verification of attribution requirements.
 
@@ -150,4 +168,4 @@ See [`PROGRESS.md`](PROGRESS.md) for the current next step.
 
 ## License
 
-Not decided yet. The code license will be chosen separately from the rights and attribution conditions of Ganjoor's data, transcriptions, annotations, recordings, and generated artifacts.
+This project is licensed under the MIT License. See [`LICENSE`](LICENSE) for the full text. This is separate from the licensing and attribution requirements for Ganjoor's data, transcriptions, annotations, recordings, and generated artifacts.
