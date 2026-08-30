@@ -63,6 +63,16 @@ Design proposals should include:
 
 Evaluation runs are important to this project. If you run a prompt comparison or retrieval check, record it under `evaluations/` with the date and the exact prompt used.
 
+We also accept structured community submissions under `community/`. Use a GitHub username directory and a UTC timestamp directory, for example:
+
+```text
+community/ideas/your-github-username/2026-08-30T090000Z/idea.md
+community/test-results/your-github-username/2026-08-30T090000Z/result.md
+community/design-proposals/your-github-username/2026-08-30T090000Z/proposal.md
+```
+
+The date must be in ISO 8601 UTC form with a `Z`, and the filename should remain a Markdown file. CI validates the directory naming convention with `scripts/check_contrib_paths.py`.
+
 All claims about poem text, author attribution, or Ganjoor URLs must be supported by evidence. If the result is unverified, say so explicitly.
 
 ## Pull requests

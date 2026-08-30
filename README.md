@@ -161,6 +161,14 @@ We welcome design proposals, bug reports, code contributions, and evaluation not
 
 The project is intended to be community-friendly and respectful. See [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) for the expected behavior.
 
+Community submissions can be added under `community/` in one of three categories:
+
+- `community/ideas/<github-username>/<timestamp>/idea.md`
+- `community/design-proposals/<github-username>/<timestamp>/proposal.md`
+- `community/test-results/<github-username>/<timestamp>/result.md`
+
+The file should be a plain Markdown document and the username/timestamp must follow the repository's naming convention. CI validates the directory layout via `scripts/check_contrib_paths.py`.
+
 Useful early contributions include sample thematic queries with expected relevant poems, notes about Persian normalization, retrieval evaluation examples, feedback on MCP tool boundaries, and verification of attribution requirements.
 
 The project is published as a GitHub repository with automated formatting,

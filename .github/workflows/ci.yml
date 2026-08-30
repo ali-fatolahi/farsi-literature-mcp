@@ -24,6 +24,9 @@ jobs:
       - name: Check formatting
         run: test -z "$(gofmt -l .)"
 
+      - name: Validate community contribution paths
+        run: python3 scripts/check_contrib_paths.py
+
       - name: Vet
         run: CGO_ENABLED=0 go vet ./...
 
