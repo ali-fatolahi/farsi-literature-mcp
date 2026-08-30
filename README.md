@@ -159,6 +159,8 @@ All search results should include stable identifiers and a link to the relevant 
 
 We welcome design proposals, bug reports, code contributions, and evaluation notes. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the current contribution workflow, required review process, and testing expectations.
 
+The project is intended to be community-friendly and respectful. See [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) for the expected behavior.
+
 Useful early contributions include sample thematic queries with expected relevant poems, notes about Persian normalization, retrieval evaluation examples, feedback on MCP tool boundaries, and verification of attribution requirements.
 
 The project is published as a GitHub repository with automated formatting,

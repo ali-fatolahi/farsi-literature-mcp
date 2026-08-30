@@ -82,6 +82,16 @@ Do not merge your own PR until it has been reviewed and approved.
 
 The repository owner is the initial maintainer. As the project grows, governance can be expanded through a documented maintainer policy and custom review requirements.
 
+The repository owner is exempt from the usual approval requirement and may merge directly to `main` for repository maintenance. All other contributors must use pull requests, required CI checks, and repo-owner review before merge.
+
+## Security
+
+If you discover a security vulnerability, do not open a public issue. Follow the reporting process in [`SECURITY.md`](SECURITY.md).
+
+## Code of conduct
+
+The project expects respectful, constructive participation. See [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md).
+
 ## License
 
 This project is licensed under the MIT License. See `LICENSE` for details.
