@@ -5,7 +5,7 @@ This file records implementation progress. Design rationale belongs in [`DESIGN.
 ## Status
 
 **Current phase:** open-source governance and MVP evaluation
-**Last updated:** 2026-08-28
+**Last updated:** 2026-08-30
 **Runnable server:** initial stdio server available
 
 ## Completed
@@ -38,7 +38,7 @@ This file records implementation progress. Design rationale belongs in [`DESIGN.
 
 ## Next Steps
 
-### Step -1: establish the open-source contribution workflow
+### Completed milestone: establish the open-source contribution workflow
 
 Completed on 2026-08-28. The repository now has:
 
@@ -53,7 +53,7 @@ Completed on 2026-08-28. The repository now has:
   them.
 - A repository license and clear owner-exemption governance.
 
-### Step -2: package a container distribution
+### Deferred milestone: package a container distribution
 
 This is deferred until the API-backed MVP and contribution workflow are
 stable. Later work should define a minimal container image, configuration and

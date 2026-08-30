@@ -1,6 +1,25 @@
 # Ganjoor MCP
 
+[![CI](https://github.com/ali-fatolahi/farsi-literature-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/ali-fatolahi/farsi-literature-mcp/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
 An MCP server and AI-agent interface for searching Persian classical literature by meaning, theme, and context, not only by exact keywords.
+
+GitHub short description:
+
+Experimental open-source POC for an AI-assisted Persian literature hub. Uses Ganjoor as a public, provenance-aware testbed for literary retrieval, evaluation, and MCP tooling.
+
+## Public project status
+
+This repository is an experimental, open-source proof of concept for an AI-assisted Persian literature hub. The current implementation uses Ganjoor as a pragmatic public testbed because it is accessible, well known, and useful for evaluating provenance-aware literary retrieval.
+
+This project is not claiming that a local MCP server is already a universally better replacement for a general-purpose model such as Claude Desktop. The goal is to explore evidence-first retrieval, exact-source quoting, and evaluation methods that make literary search more transparent and more verifiable.
+
+We welcome contributions in three forms:
+
+- code
+- ideas, use cases, and design proposals
+- test results and prompt evaluations
 
 The initial target is [Ganjoor](https://ganjoor.net), a large public collection of Persian poetry. This project is in early implementation.
 
