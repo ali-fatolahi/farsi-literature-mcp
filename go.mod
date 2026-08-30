@@ -1,8 +1,6 @@
 module github.com/alifatolahi/ganjoor-mcp
 
-go 1.23.0
-
-toolchain go1.23.12
+go 1.27.0
 
 require github.com/modelcontextprotocol/go-sdk v1.1.0
 

@@ -57,7 +57,7 @@ The latest research notes, corpus figures, attribution considerations, and archi
 
 ## Setup
 
-Requirements: Go 1.23 or newer for the MCP SDK integration.
+Requirements: Go 1.27 or newer for the MCP SDK integration.
 
 ```sh
 git clone https://github.com/ali-fatolahi/farsi-literature-mcp.git

@@ -2,7 +2,7 @@
 
 ## Project overview
 
-This repository is a Go 1.23+ MCP server for read-only access to Ganjoor
+This repository is a Go 1.27+ MCP server for read-only access to Ganjoor
 Persian literature. The current runtime uses the Ganjoor HTTP API directly;
 the pinned `ganjoor-data` export and local indexing pipeline are longer-term
 work, not required for the current server.

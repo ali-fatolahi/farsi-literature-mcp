@@ -99,7 +99,7 @@ with timeouts, bounded retries, rate limiting, and explicit errors.
 
 The initial component choices are:
 
-- Go 1.23 or newer.
+- Go 1.27 or newer.
 - The official `github.com/modelcontextprotocol/go-sdk/mcp` package for the
   MCP server and client interfaces.
 - `modernc.org/sqlite` pinned to the v1.34 line for a pure-Go
@@ -115,7 +115,7 @@ complete poem retrieval, `GET /api/ganjoor/poet/{id}` for poet lookup,
 poem retrieval and deliberately disables unrelated expansions such as
 recitations, images, songs, comments, navigation, and related poems.
 
-The SDK dependency requires Go 1.23 or newer. Vector storage and embedding
+The SDK dependency requires Go 1.27 or newer. Vector storage and embedding
 model selection remain intentionally deferred until the lexical baseline is
 measured.
 
@@ -161,7 +161,7 @@ server and client roles needed by the planned thin host. A pure-Go SQLite
 driver keeps the first binary free of CGO/compiler requirements while
 providing a mature local database and full-text search baseline.
 
-**Compatibility:** Current SDK releases require Go 1.23 or newer. Pin
+**Compatibility:** Current SDK releases require Go 1.27 or newer. Pin
 dependencies rather than tracking `main`; revisit versions during module
 creation if the installed toolchain or MCP protocol target changes.
 
